@@ -73,7 +73,7 @@ export default {
     margin-bottom: 12px;
     display: flex;
     align-self: center;
-    width: 30%;
+    width: 40%;
   }
   label {
     width: 40%;
@@ -96,10 +96,23 @@ export default {
     border-radius: 4px;
     padding: 4px;
     color: #fff;
-    background: linear-gradient(90deg, rgba(68,179,21,1) 0%, rgba(25,182,59,1) 59%, rgba(17,144,42,1) 100%); 
+    background: linear-gradient(90deg, rgba(68,179,21,1) 0%, rgba(25,182,59,1) 59%, rgba(17,144,42,1) 100%);
+    animation: gradient 5s infinite ease-in;
+    background-size: 400%;
   }
   .buttonContainer button[disabled] {
     background: gray;
     cursor: default;
   }
+    @keyframes gradient {
+      0% {
+          background-position: 0% 0%;
+      }
+      50% {
+          background-position: 100% 50%;
+      }
+      100% {
+          background-position: 0% 50%;
+      }
+    }
 </style>

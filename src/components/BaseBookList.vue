@@ -226,7 +226,12 @@ export default {
         padding: 4px;
     }
     button.save {
-        background: linear-gradient(90deg, rgba(68,179,21,1) 0%, rgba(25,182,59,1) 59%, rgba(17,144,42,1) 100%); 
+        background: linear-gradient(90deg, rgba(68,179,21,1) 0%, rgba(25,182,59,1) 59%, rgba(17,144,42,1) 100%);
+        animation: gradient 5s ease-in infinite;
+        background-size: 400%;
+    }
+    button.save:hover {
+        /* box-shadow:  */
     }
     button.save[disabled] {
         background: gray;
@@ -234,5 +239,16 @@ export default {
     }
     button.delete {
         background: linear-gradient(90deg, rgba(196,63,23,1) 0%, rgba(182,67,25,1) 60%, rgba(158,54,21,1) 100%); 
+    }
+    @keyframes gradient {
+        0% {
+            background-position: 0% 0%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
     }
 </style>
