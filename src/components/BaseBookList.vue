@@ -25,7 +25,7 @@
                             <textarea v-model="selectedBook.description"/>
                         </div>
                         <div class="buttonContainer">
-                            <button class="save" @click="updateBook()">Save book info</button>
+                            <button class="save" @click="updateBook()" :disabled="!bookDataChanged">Save book info</button>
                             <button class="delete" @click="deleteBook()">Delete book</button>
                         </div>
                     </div>
@@ -35,7 +35,6 @@
     </transition-group>
   </div>
     <AddNewBookForm
-        :bookList="bookList"
         @newBookAdded="addNewBookToList"
     />
   </div>
@@ -61,13 +60,27 @@ export default {
             selectedBook: null,
         }
     },
+    computed: {
+        bookDataChanged() {
+            // check if selected books data differs from the original book data,
+            // then allow updating it should it differ
+            if (this.selectedBook != null) {
+                const originalBookObj = this.bookList.find(x => x.id === this.selectedBook.id)
+                for (const key of Object.keys(originalBookObj)) {
+                    if (originalBookObj[key] !== this.selectedBook[key]) {
+                        return true
+                    }
+                }
+            }
+            return false;
+        }
+    },
     methods: {
         initBookList() {
             // create a mutateable list based on the original booksList
             // and add a prop which we can use to trigger a "collapsible" section with more info
             this.bookList = this.books.map(x => commonHelpers.initSingleBookObject(x))
         },
-
         selectBook(book) {
             // Probably a bit hacky way to achieve this
             // The idea is to have only one book item "open" at a time, so we clear all other "open" ones
@@ -97,13 +110,10 @@ export default {
             }
         },
         updateBookInformationOnList(bookData) {
-            console.log("🚀 ~ file: BaseBookList.vue ~ line 101 ~ updateBookInformationOnList ~ bookData", bookData)
             const bookObj = this.bookList.find(x => x.id === bookData.id);
-            console.log("🚀 ~ file: BaseBookList.vue ~ line 102 ~ updateBookInformationOnList ~ bookObj", bookObj)
             for (const key of Object.keys(bookObj)) {
-                console.log("🚀 ~ file: BaseBookList.vue ~ line 104 ~ updateBookInformationOnList ~ key", key)
                 this.$set(bookObj, key, bookData[key])
-            } 
+            }
         },
         async deleteBook() {
             try {
@@ -117,7 +127,8 @@ export default {
         deleteBookFromList(bookId) {
             const deletedBookIndex = this.bookList.findIndex(x => x.id === bookId);
             this.bookList.splice(deletedBookIndex, 1);
-        }
+            this.clearSelectedBook()
+        },
     },
     mounted() {
         this.initBookList()
@@ -216,6 +227,10 @@ export default {
     }
     button.save {
         background: linear-gradient(90deg, rgba(68,179,21,1) 0%, rgba(25,182,59,1) 59%, rgba(17,144,42,1) 100%); 
+    }
+    button.save[disabled] {
+        background: gray;
+        cursor: default;
     }
     button.delete {
         background: linear-gradient(90deg, rgba(196,63,23,1) 0%, rgba(182,67,25,1) 60%, rgba(158,54,21,1) 100%); 
