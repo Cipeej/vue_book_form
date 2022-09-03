@@ -22,6 +22,7 @@ async function updateBook(bookId, data) {
         console.error(error)
     } 
 }
+
 async function deleteBook(bookId) {
     try {
         return await axios.delete(BASE_URL + '/' + bookId);
@@ -37,4 +38,5 @@ async function submitNewBook(bookObj) {
         console.error(error)
     }
 }
+
 export default httpHelpers
