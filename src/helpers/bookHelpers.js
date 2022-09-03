@@ -16,6 +16,10 @@ async function getBooks() {
 }
 
 async function updateBook(bookId, data) {
+    if (data.showDetails) {
+        // don't need showDetails property when updating book
+        delete data.showDetails
+    }
     try {
         return await axios.put(BASE_URL + '/' + bookId, data);
     } catch (error) {
