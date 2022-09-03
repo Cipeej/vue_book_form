@@ -34,11 +34,6 @@ export default {
       return this.newBook.title == '' || this.newBook.author == '' || this.newBook.description == ''
     }
   },
-  props: {
-    bookList: {
-      type: Array,
-    }
-  },
   methods: {
     initNewBookObj() {
       // Init the book object, as it is in the parent
@@ -57,7 +52,7 @@ export default {
       }
     },
     emitNewBookAdded(bookObj) {
-      // emit added new book data to parent, so we can push it to the array and trigger re-render
+      // emit added new book data to parent, so we can push it to the array and trigger re-render of the book list view
       this.$emit("newBookAdded", bookObj)
     },
   },
