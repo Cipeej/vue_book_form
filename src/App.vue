@@ -6,7 +6,6 @@
     <div v-else>
         No books to show :(
         Add a new one?
-
     </div>
   </div>
 </template>
