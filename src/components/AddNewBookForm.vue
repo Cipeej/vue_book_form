@@ -10,7 +10,7 @@
         <input v-model="newBook.author" class="form_bookAuthor">
     </div>
     <div class="description">
-        <label>Description:</label>
+        <label>Description: </label>
         <textarea v-model="newBook.description"/>
     </div>
     <div class="buttonContainer">
@@ -46,7 +46,7 @@ export default {
       try {
         const response = await bookHelpers.submitNewBook(this.newBook)
         this.emitNewBookAdded(response.data)
-        this.initNewBookObj()
+        this.initNewBookObj() // reset v-model after adding a new book
       } catch (error) {
         console.error(error)
       }
@@ -62,57 +62,6 @@ export default {
 }
 </script>
 
-<style scoped>
-  .formContainer {
-    display: flex;
-    flex-flow: column nowrap;
-    margin-top: 30px;
-    background: #d9d9d9;
-  }
-  .formContainer div {
-    margin-bottom: 12px;
-    display: flex;
-    align-self: center;
-    width: 40%;
-  }
-  label {
-    width: 40%;
-    text-align: left;
-  }
-  input, textarea {
-    width: 60%;
-    min-width: 60%;
-    max-width: 60%;
-  }
-  .buttonContainer {
-    display: flex;
-    justify-content: flex-end;
-  }
-  .buttonContainer button {
-    min-width: 100px;
-    min-height: 30px;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-    padding: 4px;
-    color: #fff;
-    background: linear-gradient(90deg, rgba(68,179,21,1) 0%, rgba(25,182,59,1) 59%, rgba(17,144,42,1) 100%);
-    animation: gradient 5s infinite ease-in;
-    background-size: 400%;
-  }
-  .buttonContainer button[disabled] {
-    background: gray;
-    cursor: default;
-  }
-    @keyframes gradient {
-      0% {
-          background-position: 0% 0%;
-      }
-      50% {
-          background-position: 100% 50%;
-      }
-      100% {
-          background-position: 0% 50%;
-      }
-    }
+<style scoped src="@/styles/new-book-form.css">
+
 </style>

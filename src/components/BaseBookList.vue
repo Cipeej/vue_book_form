@@ -88,6 +88,8 @@ export default {
                 book.showDetails = false;
             }
             book.showDetails = true
+            // set selected books data to selectedBook-data property,
+            // so we can later check if the user has modified it, and allow saving (updating) it
             this.selectedBook = {...book}
         },
         unselectBook(book) {
@@ -95,6 +97,7 @@ export default {
             this.clearSelectedBook()
         },
         clearSelectedBook() {
+            // clear selected book v-model just in case, to not have data lingering if no book is selected
             this.selectedBook = null
         },
         addNewBookToList(bookItem) {
@@ -110,6 +113,7 @@ export default {
             }
         },
         updateBookInformationOnList(bookData) {
+            // update the "old" book with new data
             const bookObj = this.bookList.find(x => x.id === bookData.id);
             for (const key of Object.keys(bookObj)) {
                 this.$set(bookObj, key, bookData[key])
@@ -125,6 +129,7 @@ export default {
             }
         },
         deleteBookFromList(bookId) {
+            // delete the removed book from array to trigger re-render of book list
             const deletedBookIndex = this.bookList.findIndex(x => x.id === bookId);
             this.bookList.splice(deletedBookIndex, 1);
             this.clearSelectedBook()
@@ -136,119 +141,4 @@ export default {
 }
 </script>
 
-<style scoped>
-    h2 {
-        text-align: left;
-    }
-    .bookListContainer {
-        display: flex;
-        flex-flow: column nowrap;
-    }
-    .bookContainer {
-        display: flex;
-        flex-flow: row nowrap;
-        align-self: center;
-    }
-    .bookContainer button {
-        background: unset;
-        border: none;
-        cursor: pointer;
-    }
-    p.title {
-        font-weight: 600;
-        font-size: 14px;
-        text-align: left;
-    }
-    p.author {
-        font-style: italic;
-        text-align: left;
-        padding-left: 12px;
-    }
-    section.selected {
-        box-shadow: 0px 0px 10px 2px rgba(0,0,0,0.5);
-        transition: all 0.05s ease-in;
-        min-height: 200px;
-        display: flex;
-        flex-flow: row nowrap;
-        gap: 100px;
-        align-items: flex-start;
-        width: 100%;
-        justify-content: space-between;
-    }
-    .slide-in-enter-active,
-    .slide-in-leave-active {
-        transition: all 0.5s ease;
-    }
-
-    .slide-in-enter,
-    .slide-in-leave-to {
-        opacity: 0;
-        transform: translateX(30px);
-    }
-    .editBookInfo {
-        width: 60%;
-    }
-    .itemDetailsContainer {
-        display: flex;
-        flex-flow: column nowrap;
-        padding-right: 12px;
-    }
-    .itemDetailsContainer h3 {
-        width: 80%;
-        align-self: flex-end;
-        text-align: left;
-    }
-    .itemDetailsContainer div {
-        margin-bottom: 12px;
-        display: flex;
-        align-self: flex-end;
-        width: 80%;
-    }
-    label {
-        width: 40%;
-        text-align: left;
-    }
-    input, textarea {
-        width: 60%;
-        min-width: 60%;
-        max-width: 60%;
-    }
-    .buttonContainer {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-    }
-    .buttonContainer button {
-        min-width: 100px;
-        min-height: 30px;
-        color: #fff;
-        border-radius: 4px;
-        padding: 4px;
-    }
-    button.save {
-        background: linear-gradient(90deg, rgba(68,179,21,1) 0%, rgba(25,182,59,1) 59%, rgba(17,144,42,1) 100%);
-        animation: gradient 5s ease-in infinite;
-        background-size: 400%;
-    }
-    button.save:hover {
-        /* box-shadow:  */
-    }
-    button.save[disabled] {
-        background: gray;
-        cursor: default;
-    }
-    button.delete {
-        background: linear-gradient(90deg, rgba(196,63,23,1) 0%, rgba(182,67,25,1) 60%, rgba(158,54,21,1) 100%); 
-    }
-    @keyframes gradient {
-        0% {
-            background-position: 0% 0%;
-        }
-        50% {
-            background-position: 100% 50%;
-        }
-        100% {
-            background-position: 0% 50%;
-        }
-    }
-</style>
+<style scoped src="@/styles/book-list.css"></style>
