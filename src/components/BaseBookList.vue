@@ -3,7 +3,7 @@
   <div v-if="bookList.length > 0" class="bookListContainer">
     <h2>All available books</h2>
     <transition-group name="slide-in" tag="div">
-        <div v-for="book in bookList" :key="book.title" class="bookContainer">
+        <div v-for="book in bookList" :key="book.id" class="bookContainer">
             <section :key="book.id" :class="[book.showDetails ? 'selected' : '']">
                 <button @click="book.showDetails ? unselectBook(book) : selectBook(book)">
                     <p class="title">{{book.title}}</p>
