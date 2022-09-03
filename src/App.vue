@@ -41,8 +41,9 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=PT+Sans:400i,700,700i');
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'PT Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
