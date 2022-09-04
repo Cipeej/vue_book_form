@@ -65,21 +65,23 @@ section.selected {
     width: 80%;
     align-self: flex-end;
     text-align: left;
+    max-width: 800px;
 }
 .itemDetailsContainer div {
     margin-bottom: 12px;
     display: flex;
     align-self: flex-end;
     width: 80%;
+    max-width: 800px;
 }
 label {
-    width: 40%;
+    width: 20%;
     text-align: left;
 }
 input, textarea {
-    width: 60%;
-    min-width: 60%;
-    max-width: 60%;
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
 }
 textarea {
     min-height: 50px;
@@ -123,7 +125,18 @@ button.delete {
         background-position: 0% 50%;
     }
 }
-
+@media (max-width: 1200px) {
+    label {
+        width: 40%;
+    }
+    input, textarea {
+        width: 60%;
+        min-width: 60%;
+    }
+    section.selected {
+        gap: 30px;
+    }
+}
 @media (max-width: 600px) {
     section {
         width: 100%;
