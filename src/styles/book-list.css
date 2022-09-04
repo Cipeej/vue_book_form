@@ -100,9 +100,10 @@ button.save {
     background: linear-gradient(90deg, rgba(68,179,21,1) 0%, rgba(25,182,59,1) 59%, rgba(17,144,42,1) 100%);
     animation: gradient 5s ease-in infinite;
     background-size: 400%;
+    transition: box-shadow 0.1s ease-in;
 }
-button.save:hover {
-    /* box-shadow:  */
+button.save.disabled {
+    pointer-events: none;
 }
 button.save[disabled] {
     background: gray;

@@ -7,7 +7,7 @@
             <section :key="book.id" :class="[book.showDetails ? 'selected' : '']">
                 <button @click="book.showDetails ? unselectBook(book) : selectBook(book)">
                     <p class="title">{{book.title}}</p>
-                    <p class="author">{{book.author}}</p>
+                    <p class="author">By author: {{book.author}}</p>
                 </button>
                 <div v-show="book.showDetails && selectedBook != null" class="editBookInfo">
                     <div class="itemDetailsContainer" v-if="selectedBook != null">
@@ -25,7 +25,7 @@
                             <textarea v-model="selectedBook.description"/>
                         </div>
                         <div class="buttonContainer">
-                            <button class="save" @click="updateBook()" :disabled="!bookDataChanged">Save book info</button>
+                            <button :class="['save', {disabled: selectedBook.isUpdatingBook}]" @click="updateBook()" :disabled="(!bookDataChanged || selectedBook.isUpdatingBook)">{{selectedBook.isUpdatingBook ? 'Updating book..' : 'Save book info'}}</button>
                             <button class="delete" @click="deleteBook()">Delete book</button>
                         </div>
                     </div>
@@ -67,7 +67,8 @@ export default {
             if (this.selectedBook != null) {
                 const originalBookObj = this.bookList.find(x => x.id === this.selectedBook.id)
                 for (const key of Object.keys(originalBookObj)) {
-                    if (originalBookObj[key] !== this.selectedBook[key]) {
+                    // check if properties match, as we don't want to check selectedBook's 'isUpdatingBook' property, which doesn't exist on originalBookObj
+                    if (this.selectedBook[key] && originalBookObj[key] !== this.selectedBook[key]) {
                         return true
                     }
                 }
@@ -90,7 +91,7 @@ export default {
             book.showDetails = true
             // set selected books data to selectedBook-data property,
             // so we can later check if the user has modified it, and allow saving (updating) it
-            this.selectedBook = {...book}
+            this.selectedBook = {...book, isUpdatingBook: false}
         },
         unselectBook(book) {
             book.showDetails = false
@@ -103,19 +104,28 @@ export default {
         addNewBookToList(bookItem) {
             this.bookList.push(commonHelpers.initSingleBookObject(bookItem))
         },
+        // TODO: Add spinner and disabled states to buttons to prevent button spamming
         async updateBook() {
             try {
+                // switch isUpdatingBook to true, to show a different text when a user has clicked update button
+                this.selectedBook.isUpdatingBook = true;
                 const bookId = this.selectedBook.id;
                 const res = await bookHelpers.updateBook(bookId, this.selectedBook)
                 this.updateBookInformationOnList(res.data);
             } catch (error) {
                 console.error(error)
+            } finally {
+                this.selectedBook.isUpdatingBook = false;
+                this.clearSelectedBook()
             }
         },
         updateBookInformationOnList(bookData) {
             // update the "old" book with new data
             const bookObj = this.bookList.find(x => x.id === bookData.id);
             for (const key of Object.keys(bookObj)) {
+                // Note: showDetails comes up as undefined, which is unwanted but still works (thanks Javascript).
+                // this is because when we are updating book, we delete the showDetails prop in bookHelpers, to not send it to "backend"
+                // this closes the opened book
                 this.$set(bookObj, key, bookData[key])
             }
         },
