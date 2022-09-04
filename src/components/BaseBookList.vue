@@ -2,7 +2,7 @@
 <div>
   <div v-if="bookList.length > 0" class="bookListContainer">
     <h2>All available books</h2>
-    <transition-group name="slide-in" tag="div">
+    <transition-group appear name="slide-in" tag="div">
         <div v-for="book in bookList" :key="book.id" class="bookContainer">
             <section :key="book.id" :class="[book.showDetails ? 'selected' : '']">
                 <button @click="book.showDetails ? unselectBook(book) : selectBook(book)">
@@ -49,11 +49,6 @@ export default {
     components: {
         AddNewBookForm,
     },
-    props: {
-        books: {
-            type: Array,
-        }
-    },
     data() {
         return {
             bookList: [],
@@ -77,10 +72,15 @@ export default {
         }
     },
     methods: {
-        initBookList() {
-            // create a mutateable list based on the original booksList
-            // and add a prop which we can use to trigger a "collapsible" section with more info
-            this.bookList = this.books.map(x => commonHelpers.initSingleBookObject(x))
+        async initBookList() {
+            try {
+                const { data } = await bookHelpers.getBooks()
+                if (data.length > 0) {
+                    this.bookList = data.map(x => commonHelpers.initSingleBookObject(x))
+                }
+            } catch (error) {
+                console.error(error)
+            }
         },
         selectBook(book) {
             // Probably a bit hacky way to achieve this

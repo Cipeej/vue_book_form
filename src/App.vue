@@ -1,41 +1,16 @@
 <template>
   <div id="app">
-    <BaseBookList v-if="bookList.length > 0"
-      :books="bookList"
-    />
-    <div v-else>
-        No books to show :(
-        Add a new one?
-    </div>
+    <BaseBookList/>
   </div>
 </template>
 
 <script>
 import BaseBookList from './components/BaseBookList.vue'
-import bookHelpers from './helpers/bookHelpers.js'
 export default {
   name: 'App',
   components: {
     BaseBookList,
   },
-  data() {
-    return {
-      bookList: []
-    }
-  },
-  methods: {
-    async getAllBooksList() {
-      try {
-        const bookList = await bookHelpers.getBooks()
-        this.bookList = bookList.data
-      } catch (error) {
-        console.error(error)
-      }        
-    }
-  },
-  created() {
-    this.getAllBooksList()
-  }
 }
 </script>
 
