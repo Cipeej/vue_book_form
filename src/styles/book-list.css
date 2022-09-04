@@ -111,6 +111,10 @@ button.save[disabled] {
     background: gray;
     cursor: default;
 }
+button.delete[disabled] {
+    background: gray;
+    cursor: default;
+}
 button.delete {
     background: linear-gradient(90deg, rgba(196,63,23,1) 0%, rgba(182,67,25,1) 60%, rgba(158,54,21,1) 100%); 
 }

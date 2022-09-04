@@ -26,7 +26,7 @@
                         </div>
                         <div class="buttonContainer">
                             <button :class="['save', {disabled: selectedBook.isUpdatingBook}]" @click="updateBook()" :disabled="(!bookDataChanged || selectedBook.isUpdatingBook)">{{selectedBook.isUpdatingBook ? 'Updating book..' : 'Save book info'}}</button>
-                            <button class="delete" @click="deleteBook()">Delete book</button>
+                            <button class="delete" @click="deleteBook()" :disabled="selectedBook.isDeletingBook">{{selectedBook.isDeletingBook ? 'Deleting book..' : 'Delete book'}}</button>
                         </div>
                     </div>
                 </div>
@@ -91,7 +91,7 @@ export default {
             book.showDetails = true
             // set selected books data to selectedBook-data property,
             // so we can later check if the user has modified it, and allow saving (updating) it
-            this.selectedBook = {...book, isUpdatingBook: false}
+            this.selectedBook = {...book, isUpdatingBook: false, isDeletingBook: false}
         },
         unselectBook(book) {
             book.showDetails = false
@@ -131,18 +131,21 @@ export default {
         },
         async deleteBook() {
             try {
+                this.selectedBook.isDeletingBook = true;
                 const bookId = this.selectedBook.id;
                 await bookHelpers.deleteBook(bookId)
                 this.deleteBookFromList(bookId)
             } catch (error) {
                 console.error(error)
+            } finally {
+                this.selectedBook.isDeletingBook = false;
+                this.clearSelectedBook()
             }
         },
         deleteBookFromList(bookId) {
             // delete the removed book from array to trigger re-render of book list
             const deletedBookIndex = this.bookList.findIndex(x => x.id === bookId);
             this.bookList.splice(deletedBookIndex, 1);
-            this.clearSelectedBook()
         },
     },
     mounted() {
