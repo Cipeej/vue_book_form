@@ -1,5 +1,5 @@
 import axios from "axios"
-const BASE_URL = 'http://localhost:3000/books'
+const BASE_URL = 'http://localhost:3000/books' // this should probably be configurated somewhere
 const httpHelpers = {
     getBooks,
     updateBook,
