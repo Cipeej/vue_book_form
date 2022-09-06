@@ -4,7 +4,10 @@ This project acts as a book managing app, where the user can add new books to th
 It consists of a Vue front-end part and a quick and "fake" json-server backend.
 
 ### Prerequisites
-- Node.js with npm
+- Node.js with npm,
+- git
+
+### First clone the repository
 
 ### Starting front-end
 - Run the command `npm run serve` with a terminal at project root
@@ -15,3 +18,5 @@ It consists of a Vue front-end part and a quick and "fake" json-server backend.
 - To do this, run the command `npm install -g json-server` at a terminal
 - To start json-server, use the command `json-server booksData.json` at project root
 - json-server utilises localhost:3000 port
+
+#### after front and back-end are running, you should be able to run the app at localhost:8080
