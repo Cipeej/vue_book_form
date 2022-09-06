@@ -36,6 +36,9 @@ async function deleteBook(bookId) {
 }
 
 async function submitNewBook(bookObj) {
+    if (bookObj.isUploadingNewBook) {
+        delete bookObj.isUploadingNewBook
+    }
     try {
         return await axios.post(BASE_URL, bookObj);
     } catch (error) {
