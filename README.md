@@ -4,10 +4,12 @@ This project acts as a book managing app, where the user can add new books to th
 It consists of a Vue front-end part and a quick and "fake" json-server backend.
 
 ### Prerequisites
-- Node.js with npm,
+- Node.js with npm
 - git
 
 ### First clone the repository
+- Either open with github desktop
+- Or run `git-clone https://github.com/Cipeej/vue_book_form.git` at terminal
 
 ### Starting front-end
 - Run the command `npm run serve` with a terminal at project root
