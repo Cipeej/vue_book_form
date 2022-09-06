@@ -9,7 +9,7 @@
                     <p class="title">{{book.title}}</p>
                     <p class="author">By author: {{book.author}}</p>
                 </button>
-                <div v-show="book.showDetails && selectedBook != null" class="editBookInfo">
+                <div v-show="book.showDetails" class="editBookInfo">
                     <div class="itemDetailsContainer" v-if="selectedBook != null">
                         <h3>Edit book info</h3>
                         <div class="title">
