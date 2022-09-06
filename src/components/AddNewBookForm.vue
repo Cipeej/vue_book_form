@@ -2,19 +2,22 @@
 <div class="formContainer">
     <h2>Add new book to the collection</h2>
     <div class="title">
-        <label>Title: </label>
+        <label>Title: *</label>
         <input v-model="newBook.title" class="form_bookTitle">
     </div>
     <div class="author">
-        <label>Author: </label>
+        <label>Author: *</label>
         <input v-model="newBook.author" class="form_bookAuthor">
     </div>
     <div class="description">
-        <label>Description: </label>
+        <label>Description: *</label>
         <textarea v-model="newBook.description"/>
     </div>
     <div class="buttonContainer">
-      <button @click="addNewBook()" :disabled="isMissingValues">Add new Book</button>
+      <button @click="addNewBook()" :title="isMissingValues ? 'Please fill all fields before uploading data' : 'Upload book'" 
+        :disabled="isMissingValues">
+          {{ newBook.isUploadingNewBook ? 'Uploading new book..' : 'Add new Book' }}
+      </button>
     </div>
 </div>
 </template>
@@ -30,7 +33,7 @@ export default {
   },
   computed: {
     isMissingValues() {
-      // A bit of an messy way to check the fields have values before posting. I am assuming that each field would be required to post a new book
+      // A bit of an messy way to check the fields have values before posting. This assumes that each field would be required to post a new book
       return this.newBook.title == '' || this.newBook.author == '' || this.newBook.description == ''
     }
   },
@@ -40,15 +43,19 @@ export default {
       this.newBook = this.newBookObj()
     },
     newBookObj() {
-      return {id: commonHelpers.uniqueID(), title: '', author: '', description: ''}
+      return {id: commonHelpers.uniqueID(), title: '', author: '', description: '', isUploadingNewBook: false}
     },
     async addNewBook() {
       try {
+        this.newBook.isUploadingNewBook = true;
         const response = await bookHelpers.submitNewBook(this.newBook)
-        this.emitNewBookAdded(response.data)
-        this.initNewBookObj() // reset v-model after adding a new book
+        if (response.status === 201) { // 201 status corresponds to 'created' response, which means the upload should be succesful. Should add these to a constant file
+          this.emitNewBookAdded(response.data)
+          this.initNewBookObj() // reset v-model after adding a new book
+        }
       } catch (error) {
         console.error(error)
+        this.newBook.isUploadingNewBook = false;
       }
     },
     emitNewBookAdded(bookObj) {

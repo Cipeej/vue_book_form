@@ -25,7 +25,10 @@
                             <textarea v-model="selectedBook.description"/>
                         </div>
                         <div class="buttonContainer">
-                            <button :class="['save', {disabled: selectedBook.isUpdatingBook}]" @click="updateBook()" :disabled="(!bookDataChanged || selectedBook.isUpdatingBook)">{{selectedBook.isUpdatingBook ? 'Updating book..' : 'Save book info'}}</button>
+                            <button :class="['save', {disabled: selectedBook.isUpdatingBook}]" @click="updateBook()" 
+                                :disabled="(!bookDataChanged || selectedBook.isUpdatingBook)" :title="!bookDataChanged ? 'Updating a book requires changes to book data' : 'Update book data'">
+                                {{selectedBook.isUpdatingBook ? 'Updating book..' : 'Update book'}}
+                            </button>
                             <button class="delete" @click="deleteBook()" :disabled="selectedBook.isDeletingBook">{{selectedBook.isDeletingBook ? 'Deleting book..' : 'Delete book'}}</button>
                         </div>
                     </div>
@@ -75,23 +78,23 @@ export default {
         async initBookList() {
             try {
                 const { data } = await bookHelpers.getBooks()
-                if (data.length > 0) {
+                if (data && data.length > 0) {
                     this.bookList = data.map(x => commonHelpers.initSingleBookObject(x))
                 }
             } catch (error) {
                 console.error(error)
             }
         },
-        selectBook(book) {
+        selectBook(selectedBook) {
             // Probably a bit hacky way to achieve this
             // The idea is to have only one book item "open" at a time, so we clear all other "open" ones
             for (const book of this.bookList) {
                 book.showDetails = false;
             }
-            book.showDetails = true
+            selectedBook.showDetails = true
             // set selected books data to selectedBook-data property,
             // so we can later check if the user has modified it, and allow saving (updating) it
-            this.selectedBook = {...book, isUpdatingBook: false, isDeletingBook: false}
+            this.selectedBook = {...selectedBook, isUpdatingBook: false, isDeletingBook: false}
         },
         unselectBook(book) {
             book.showDetails = false
@@ -104,19 +107,20 @@ export default {
         addNewBookToList(bookItem) {
             this.bookList.push(commonHelpers.initSingleBookObject(bookItem))
         },
-        // TODO: Add spinner and disabled states to buttons to prevent button spamming
         async updateBook() {
             try {
                 // switch isUpdatingBook to true, to show a different text when a user has clicked update button
+                // cleared on this.clearSelectedBook
                 this.selectedBook.isUpdatingBook = true;
                 const bookId = this.selectedBook.id;
+                // sanity checks, check if update was succesful
                 const res = await bookHelpers.updateBook(bookId, this.selectedBook)
-                this.updateBookInformationOnList(res.data);
+                if (res.status === 200) {
+                    this.updateBookInformationOnList(res.data);
+                    this.clearSelectedBook()
+                }
             } catch (error) {
                 console.error(error)
-            } finally {
-                this.selectedBook.isUpdatingBook = false;
-                this.clearSelectedBook()
             }
         },
         updateBookInformationOnList(bookData) {
@@ -124,22 +128,23 @@ export default {
             const bookObj = this.bookList.find(x => x.id === bookData.id);
             for (const key of Object.keys(bookObj)) {
                 // Note: showDetails comes up as undefined, which is unwanted but still works (thanks Javascript).
-                // this is because when we are updating book, we delete the showDetails prop in bookHelpers, to not send it to "backend"
+                // this is because when we are updating a book, we delete the showDetails prop in bookHelpers, to not send it to "backend"
                 // this closes the opened book
                 this.$set(bookObj, key, bookData[key])
             }
         },
         async deleteBook() {
+            // check if response is ok before deleting
             try {
                 this.selectedBook.isDeletingBook = true;
                 const bookId = this.selectedBook.id;
-                await bookHelpers.deleteBook(bookId)
-                this.deleteBookFromList(bookId)
+                const res = await bookHelpers.deleteBook(bookId)
+                if (res.status === 200) { // should probably use enums to check http status'
+                    this.deleteBookFromList(bookId)
+                    this.clearSelectedBook()
+                }
             } catch (error) {
                 console.error(error)
-            } finally {
-                this.selectedBook.isDeletingBook = false;
-                this.clearSelectedBook()
             }
         },
         deleteBookFromList(bookId) {
