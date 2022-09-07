@@ -65,10 +65,12 @@ export default {
             // then allow updating it should it differ
             if (this.selectedBook != null) {
                 const originalBookObj = this.bookList.find(x => x.id === this.selectedBook.id)
-                for (const key of Object.keys(originalBookObj)) {
-                    // check if properties match, as we don't want to check selectedBook's 'isUpdatingBook' property, which doesn't exist on originalBookObj
-                    if (this.selectedBook[key] && originalBookObj[key] !== this.selectedBook[key]) {
-                        return true
+                if (originalBookObj) {
+                    for (const key of Object.keys(originalBookObj)) {
+                        // check if properties match, as we don't want to check selectedBook's 'isUpdatingBook' property, which doesn't exist on originalBookObj
+                        if (this.selectedBook[key] && originalBookObj[key] !== this.selectedBook[key]) {
+                            return true
+                        }
                     }
                 }
             }
