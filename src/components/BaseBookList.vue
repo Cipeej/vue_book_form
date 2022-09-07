@@ -114,7 +114,6 @@ export default {
                 // cleared on this.clearSelectedBook
                 this.selectedBook.isUpdatingBook = true;
                 const bookId = this.selectedBook.id;
-                // sanity checks, check if update was succesful
                 const res = await bookHelpers.updateBook(bookId, this.selectedBook)
                 if (res.status === 200) {
                     this.updateBookInformationOnList(res.data);
@@ -135,7 +134,6 @@ export default {
             }
         },
         async deleteBook() {
-            // check if response is ok before deleting
             try {
                 this.selectedBook.isDeletingBook = true;
                 const bookId = this.selectedBook.id;
