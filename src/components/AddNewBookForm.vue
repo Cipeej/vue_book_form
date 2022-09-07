@@ -49,9 +49,11 @@ export default {
       try {
         this.newBook.isUploadingNewBook = true;
         const response = await bookHelpers.submitNewBook(this.newBook)
-        if (response.status === 201) { // 201 status corresponds to 'created' response, which means the upload should be succesful. Should add these to a constant file
+        if (response && response.status === 201) { // 201 status corresponds to 'created' response, which means the upload should be succesful. Should add these to a constant file
           this.emitNewBookAdded(response.data)
           this.initNewBookObj() // reset v-model after adding a new book
+        } else {
+          alert('Could not add book due. Possible server error')
         }
       } catch (error) {
         console.error(error)

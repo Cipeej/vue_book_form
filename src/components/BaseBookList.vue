@@ -115,9 +115,11 @@ export default {
                 this.selectedBook.isUpdatingBook = true;
                 const bookId = this.selectedBook.id;
                 const res = await bookHelpers.updateBook(bookId, this.selectedBook)
-                if (res.status === 200) {
+                if (res && res.status === 200) {
                     this.updateBookInformationOnList(res.data);
                     this.clearSelectedBook()
+                } else {
+                    alert('Could not update book. Possible server error')
                 }
             } catch (error) {
                 console.error(error)
@@ -138,9 +140,11 @@ export default {
                 this.selectedBook.isDeletingBook = true;
                 const bookId = this.selectedBook.id;
                 const res = await bookHelpers.deleteBook(bookId)
-                if (res.status === 200) { // should probably use enums to check http status'
+                if (res && res.status === 200) { // should probably use enums to check http status'
                     this.deleteBookFromList(bookId)
                     this.clearSelectedBook()
+                } else {
+                    alert('Could not delete book. Possible server error')
                 }
             } catch (error) {
                 console.error(error)
