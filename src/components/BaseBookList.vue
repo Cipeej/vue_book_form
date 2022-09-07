@@ -37,6 +37,7 @@
         </div>
     </transition-group>
   </div>
+  <h2 v-else>No books found! You can submit new ones from the form below.</h2>
     <AddNewBookForm
         @newBookAdded="addNewBookToList"
     />
