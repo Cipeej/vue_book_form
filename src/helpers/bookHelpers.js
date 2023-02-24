@@ -16,10 +16,11 @@ async function getBooks() {
 }
 
 async function updateBook(bookId, data) {
-    if (data.showDetails) {
-        // don't need showDetails property when updating book
-        delete data.showDetails
-    }
+    console.log("🚀 ~ file: bookHelpers.js:19 ~ updateBook ~ data:", data)
+    // remove added helper props when updating books, if present
+    if (data.showDetails !== undefined) delete data.showDetails
+    if (data.isUpdatingBook !== undefined) delete data.isUpdatingBook
+    if (data.isDeletingBook !== undefined) delete data.isDeletingBook
     try {
         return await axios.put(BASE_URL + '/' + bookId, data);
     } catch (error) {
