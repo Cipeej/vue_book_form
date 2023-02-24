@@ -16,7 +16,6 @@ async function getBooks() {
 }
 
 async function updateBook(bookId, data) {
-    console.log("🚀 ~ file: bookHelpers.js:19 ~ updateBook ~ data:", data)
     // remove added helper props when updating books, if present
     if (data.showDetails !== undefined) delete data.showDetails
     if (data.isUpdatingBook !== undefined) delete data.isUpdatingBook
