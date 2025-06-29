@@ -1,10 +1,10 @@
 {
   "books": [
     {
-      "id": 1132908509397,
+      "id": "1132908509397",
       "title": "A song of fire and ice",
       "author": "George R.R. Martin",
-      "description": "People die. Dragons. Magic. Much fighting"
+      "description": "People die. Dragons. Magic. Much fighting. Medieval. "
     }
   ]
 }
