@@ -14,9 +14,12 @@
         <textarea v-model="newBook.description"/>
     </div>
     <div class="buttonContainer">
-      <button @click="addNewBook()" :title="isMissingValues ? 'Please fill all fields before uploading data' : 'Upload book'" 
-        :disabled="isMissingValues">
-          {{ newBook.isUploadingNewBook ? 'Uploading new book..' : 'Add new Book' }}
+      <button 
+          :title="isMissingValues ? 'Please fill all fields before uploading data' : 'Upload book'" 
+          :disabled="isSubmitting || isMissingValues"
+          @click="addNewBook()"
+      >
+          {{ (newBook.isUploadingNewBook || isSubmitting) ? 'Uploading new book..' : 'Add new Book' }}
       </button>
     </div>
 </div>
@@ -28,12 +31,13 @@ import commonHelpers from "@/helpers/commonHelpers.js"
 import {computed, ref} from "vue";
 
 const newBook = ref({});
+const isSubmitting = ref(false);
 const emit = defineEmits(["addNewBook"]);
 
 initNewBookObj()
 
 const isMissingValues = computed(() => {
-      // A bit of an messy way to check the fields have values before posting. This assumes that each field would be required to post a new book
+  // A bit of an messy way to check the fields have values before posting. This assumes that each field would be required to post a new book
   return newBook.value.title == '' || newBook.value.author == '' || newBook.value.description == ''
 })
 
@@ -47,6 +51,7 @@ function newBookObj() {
 
 async function addNewBook() {
   try {
+    isSubmitting.value = true;
     newBook.value.isUploadingNewBook = true;
     const response = await bookHelpers.submitNewBook(newBook.value)
     if (response && response.status === 201) { // 201 status corresponds to 'created' response, which means the upload should be succesful. Should add these to a constant file
@@ -57,7 +62,9 @@ async function addNewBook() {
     }
   } catch (error) {
     console.error(error)
+  } finally {
     newBook.value.isUploadingNewBook = false;
+    isSubmitting.value = false;
   }
 }
 
