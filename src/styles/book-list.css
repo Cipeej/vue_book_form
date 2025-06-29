@@ -9,6 +9,7 @@ h2 {
     display: flex;
     flex-flow: row nowrap;
     align-self: center;
+    position: relative;
 }
 .bookContainer:nth-of-type(odd) {
     background: #e0e0e0;
@@ -123,6 +124,26 @@ button.delete[disabled] {
 }
 button.delete {
     background: linear-gradient(90deg, rgba(196,63,23,1) 0%, rgba(182,67,25,1) 60%, rgba(158,54,21,1) 100%); 
+}
+.successNotification {
+    color: #419305;
+    position: absolute;
+    top: 30px;
+    right: 30px;
+}
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+    opacity: 1;
 }
 @keyframes gradient {
     0% {

@@ -20,6 +20,7 @@ async function updateBook(bookId, data) {
     if (data.showDetails !== undefined) delete data.showDetails
     if (data.isUpdatingBook !== undefined) delete data.isUpdatingBook
     if (data.isDeletingBook !== undefined) delete data.isDeletingBook
+    if (data.successState !== undefined) delete data.successState
     try {
         return await axios.put(BASE_URL + '/' + bookId, data);
     } catch (error) {

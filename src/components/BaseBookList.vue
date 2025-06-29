@@ -17,6 +17,16 @@
                       <p class="title">{{book.title}}</p>
                       <p class="author">By author: {{book.author}}</p>
                   </button>
+                
+                  <Transition name="fade">
+                    <aside
+                        v-if="book.successState"
+                        class="successNotification"
+                    >
+                      Book updated successfully!
+                    </aside>
+                  </Transition>
+                  
                   <div 
                       v-show="book.showDetails" 
                       class="editBookInfo"
@@ -132,11 +142,12 @@ async function updateBook() {
     // switch isUpdatingBook to true, to show a different text when a user has clicked update button
     // cleared on this.clearSelectedBook
     selectedBook.value.isUpdatingBook = true;
-    const res = await bookHelpers.updateBook(selectedBook.value.id, selectedBook.value)
+    const id = selectedBook.value.id;
+    const res = await bookHelpers.updateBook(id, selectedBook.value)
     console.log(res)
     if (res && res.status === 200) {
       updateBookInformationOnList(res.data);
-      showSuccessAlert()
+      showSuccessAlertOnUpdatedBook(id);
       clearSelectedBook()
     } else {
       alert('Could not update book. Possible server error')
@@ -177,8 +188,14 @@ function deleteBookFromList(bookId) {
   bookList.value.splice(deletedBookIndex, 1);
 }
 
-function showSuccessAlert() {
+function showSuccessAlertOnUpdatedBook(id) {
   // TODO
+  const book = bookList.value.find(x => x.id === id);
+  if (!book) return;
+  book['successState'] = true;
+  setTimeout(() => {
+    book['successState'] = false;
+  }, 2500);
 }
 
 </script>
