@@ -1,17 +1,13 @@
 <template>
-  <div id="app">
-    <BaseBookList/>
+  <div>
+    <Suspense>
+      <BaseBookList />
+    </Suspense>
   </div>
 </template>
 
-<script>
+<script setup>
 import BaseBookList from './components/BaseBookList.vue'
-export default {
-  name: 'App',
-  components: {
-    BaseBookList,
-  },
-}
 </script>
 
 <style>
