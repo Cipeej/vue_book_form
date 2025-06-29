@@ -3,8 +3,9 @@ const commonHelpers = {
     initSingleBookObject
 }
 function uniqueID() {
-    // semi unique id's
-    return Math.floor(Math.random() * Date.now())
+    // semi unique id's, probably good enough for our case
+    // let's do a funny string cast
+    return Math.floor(Math.random() * Date.now()) + '';
 }
 function initSingleBookObject(bookObj) {
     return {...bookObj, showDetails: false}
