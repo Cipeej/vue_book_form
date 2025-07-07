@@ -13,7 +13,7 @@ It consists of a Vue front-end part and a quick and "fake" json-server backend.
 
 ### Starting front-end
 - First off, run the command `npm install` to install required packages at project root
-- After installing packages, run the command `npm run serve` with a terminal at project root. Note: while the front-end is now running, the server is not. So let's start that next
+- After installing packages start the front-end by running the command `vite serve` with a terminal at project root. Note: while the front-end is now running, the server is not. So let's start that next
 
 ### Starting back-end
 - Due to my poor config skills, json-server must be installed globally in order to start it
